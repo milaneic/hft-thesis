@@ -24,7 +24,6 @@ services:
     depends_on:
       - db
     volumes:
-      - .:/usr/src/app
       - /usr/src/app/node_modules
     ports:
       - ${BACKEND_PORT}:${BACKEND_PORT}
