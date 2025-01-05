@@ -1,0 +1,329 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Role {
+  _id: ID!
+  name: String!
+  created_at: DateTime!
+  updated_at: DateTime!
+  users: [User!]
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type User {
+  _id: ID!
+  firstName: String!
+  lastName: String!
+  email: String!
+  password: String!
+  dob: String!
+  roleId: String!
+  role: Role!
+  updated_at: DateTime!
+  created_at: DateTime!
+}
+
+type Driver {
+  _id: ID!
+  firstName: String!
+  lastName: String!
+  dob: String!
+  trips: [Trip!]
+  created_at: DateTime!
+  updated_at: DateTime!
+}
+
+type Event {
+  _id: ID!
+  name: String!
+  description: String
+  logs: [Log!]!
+  updated_at: DateTime!
+  created_at: DateTime!
+  trips: [Trip!]!
+}
+
+type Log {
+  _id: ID!
+  tripId: String!
+  eventId: String!
+  trip: Trip!
+  event: Event!
+  description: String
+  created_at: DateTime!
+}
+
+type Vehicle {
+  _id: ID!
+  plates: String!
+  vehicleType: VehicleType!
+  width: Float!
+  length: Float!
+  height: Float!
+  trips: [Trip!]!
+  countryId: String!
+  country: Country!
+}
+
+enum VehicleType {
+  TRUCK
+  VAN
+  PICKUP
+}
+
+type Trip {
+  _id: ID!
+  startOdometar: Float!
+  finishOdometar: Float
+  active: Boolean!
+  orders: [Order!]!
+  vehicleId: String!
+  vehicle: Vehicle!
+  driverId: String!
+  driver: Driver!
+  event_logs: [Log!]
+  updated_at: DateTime!
+  created_at: DateTime!
+  ordersCount: Int!
+  ordersTotalAmount: Float!
+  firstOrderOrigin: String!
+  lastOrderDestination: String!
+  totalTripLength: Float!
+  lastEvent: Log
+  eurosPerKm: Float!
+}
+
+type Order {
+  """Identifier for table countries."""
+  _id: ID!
+  origin: String!
+  destination: String!
+  price: Float!
+  weight: Float!
+  goodsType: GoodsType!
+  quantity: Int!
+  originCountryId: String!
+  originCountry: Country!
+  destinationCountryId: String!
+  destinationCountry: Country!
+  tripId: String!
+  trip: Trip!
+  updated_at: DateTime!
+  created_at: DateTime!
+}
+
+enum GoodsType {
+  PALLET
+  BOX
+  COLLI
+}
+
+type Country {
+  """Identifier for table countries."""
+  _id: ID!
+  name: String!
+  country_code: String!
+  created_at: DateTime!
+  updated_at: DateTime!
+  ordersAsOrigin: [Order!]
+  ordersAsDestination: [Order!]
+  vehicles: [Vehicle!]!
+}
+
+type Query {
+  roles: [Role!]!
+  role(id: String!): Role!
+  users: [User!]!
+  user(id: String!): User!
+  trips: [Trip!]!
+  active_trips: [Trip!]!
+  trip(id: String!): Trip!
+  events: [Event!]!
+  event(id: String!): Event!
+  logs: [Log!]!
+  log(tripId: String!, eventId: String!): Log!
+  countries: [Country!]!
+  country(id: String!): Country!
+  orders: [Order!]!
+  order(id: String!): Order!
+  vehicles: [Vehicle!]!
+  vehicle(id: String!): Vehicle!
+  drivers: [Driver!]!
+  driver(id: String!): Driver!
+}
+
+type Mutation {
+  createRole(createRoleInput: CreateRoleInput!): Role!
+  updateRole(updateRoleInput: UpdateRoleInput!): Role!
+  createUser(createUserInput: CreateUserInput!): User!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+  removeUser(id: String!): Boolean!
+  createTrip(createTripInput: CreateTripInput!): Trip!
+  updateTrip(updateTripInput: UpdateTripInput!): Trip!
+  removeTrip(id: String!): Boolean!
+  addEventToTrip(addEventToTripInput: AddEventToTripInput!): Trip!
+  createEvent(createEventInput: CreateEventInput!): Event!
+  updateEvent(updateEventInput: UpdateEventInput!): Event!
+  removeEvent(id: String!): Boolean!
+  createLog(createLogInput: CreateLogInput!): Log!
+  updateLog(updateLogInput: UpdateLogInput!): Log!
+  removeLog(tripId: String!, eventId: String!): Boolean!
+  createCountry(createCountryInput: CreateCountryInput!): Country!
+  updateCountry(updateCountryInput: UpdateCountryInput!): Country!
+  removeCountry(id: String!): Boolean!
+  createOrder(createOrderInput: CreateOrderInput!): Order!
+  updateOrder(updateOrderInput: UpdateOrderInput!): Order!
+  removeOrder(id: String!): Boolean!
+  createVehicle(createVehicleInput: CreateVehicleInput!): Vehicle!
+  updateVehicle(updateVehicleInput: UpdateVehicleInput!): Vehicle!
+  removeVehicle(id: String!): Boolean!
+  createDriver(createDriverInput: CreateDriverInput!): Driver!
+  updateDriver(updateDriverInput: UpdateDriverInput!): Driver!
+  removeDriver(id: String!): Boolean!
+}
+
+input CreateRoleInput {
+  name: String!
+}
+
+input UpdateRoleInput {
+  name: String
+  id: String!
+}
+
+input CreateUserInput {
+  firstName: String!
+  lastName: String!
+  email: String!
+  password: String!
+  dob: String!
+  roleId: String
+}
+
+input UpdateUserInput {
+  firstName: String
+  lastName: String
+  email: String
+  password: String
+  dob: String
+  roleId: String
+  id: String!
+}
+
+input CreateTripInput {
+  startOdometar: Float!
+  finishOdometar: Float
+  vehicleId: String!
+  driverId: String!
+  active: Boolean!
+}
+
+input UpdateTripInput {
+  startOdometar: Float!
+  finishOdometar: Float!
+  vehicleId: String
+  driverId: String
+  active: Boolean!
+  id: String!
+}
+
+input AddEventToTripInput {
+  tripId: String!
+  eventIds: [String!]!
+}
+
+input CreateEventInput {
+  name: String!
+  description: String
+}
+
+input UpdateEventInput {
+  name: String
+  description: String
+  id: String!
+}
+
+input CreateLogInput {
+  tripId: String!
+  eventId: String!
+  description: String
+}
+
+input UpdateLogInput {
+  tripId: String
+  eventId: String
+  description: String
+}
+
+input CreateCountryInput {
+  name: String!
+  country_code: String!
+}
+
+input UpdateCountryInput {
+  name: String
+  country_code: String
+  id: String!
+}
+
+input CreateOrderInput {
+  origin: String!
+  destination: String!
+  price: Float!
+  weight: Float!
+  goodsType: GoodsType!
+  quantity: Int!
+  originCountryId: String!
+  destinationCountryId: String!
+  tripId: String!
+}
+
+input UpdateOrderInput {
+  origin: String
+  destination: String
+  price: Float
+  weight: Float
+  goodsType: GoodsType
+  quantity: Int
+  originCountryId: String
+  destinationCountryId: String
+  tripId: String
+  id: String!
+}
+
+input CreateVehicleInput {
+  plates: String!
+  vehicleType: VehicleType!
+  width: Float!
+  length: Float!
+  height: Float!
+  countryId: String!
+}
+
+input UpdateVehicleInput {
+  plates: String
+  vehicleType: VehicleType
+  width: Float
+  length: Float
+  height: Float
+  countryId: String
+  id: String!
+}
+
+input CreateDriverInput {
+  firstName: String!
+  lastName: String!
+  dob: String!
+}
+
+input UpdateDriverInput {
+  firstName: String
+  lastName: String
+  dob: String
+  id: String!
+}

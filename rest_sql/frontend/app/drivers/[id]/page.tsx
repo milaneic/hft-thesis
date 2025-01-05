@@ -1,0 +1,137 @@
+"use client";
+import { z } from "zod";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Toaster, toast } from "sonner";
+import { useParams, useRouter } from "next/navigation";
+import { Driver } from "@/lib/types";
+import { useEffect, useState } from "react";
+import LoadingSpinner from "@/app/components/LoadingSpinner";
+
+const schema = z.object({
+  id: z.string(),
+  firstName: z.string().min(1, "First name is required"),
+  lastName: z.string().min(1, "Last name is required"),
+  dob: z.string(),
+});
+
+type FormFields = z.infer<typeof schema>;
+
+const NewVehicle = () => {
+  const { id } = useParams();
+  const [driver, setDriver] = useState<Driver>();
+  const router = useRouter();
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<FormFields>({
+    resolver: zodResolver(schema),
+  });
+
+  useEffect(() => {
+    const fetchDriver = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/drivers/${id}`
+        );
+
+        if (!res.ok) {
+          throw new Error("Failed to fetch driver");
+        }
+        const data = await res.json();
+        setDriver(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchDriver();
+  }, [id]);
+
+  useEffect(() => {
+    reset({
+      id: driver?._id,
+      ...driver,
+    });
+  }, [reset, driver]);
+
+  const onSubmit: SubmitHandler<FormFields> = async (formData) => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/drivers`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+      if (!res.ok) {
+        throw new Error("Failed to update driver!");
+      }
+      toast.success("Driver updated successfully!");
+      setTimeout(() => {
+        router.push("/drivers");
+      }, 1000);
+    } catch (error) {
+      toast.error("Failed to update driver!");
+      console.log(error);
+    }
+  };
+
+  if (!driver) return <LoadingSpinner />;
+
+  return (
+    <div className="max-container min-h-[calc(100vh-100px)] flex flex-col justify-center   w-1/3">
+      <h2 className="text-2xl mb-5">Driver Details:</h2>
+      <Toaster richColors />
+
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="my-5">
+          <Label htmlFor="firstName">First name:</Label>
+          <Input {...register("firstName")} id="firstName"></Input>
+          {errors.firstName && (
+            <p className="text-sm text-red-500">{errors.firstName.message}</p>
+          )}
+        </div>
+
+        <div className="my-5">
+          <Label htmlFor="lastName">Last name:</Label>
+          <Input {...register("lastName")} id="lastName"></Input>
+          {errors.lastName && (
+            <p className="text-sm text-red-500">{errors.lastName.message}</p>
+          )}
+        </div>
+
+        <div className="my-5 flex flex-col">
+          <Label htmlFor="dob" className="text-xl font-normal mb-5">
+            Date of birth:
+          </Label>
+          <Input {...register("dob")} type="date" id="dob"></Input>
+          {errors.dob && (
+            <p className="text-sm text-red-500">{errors.dob.message}</p>
+          )}
+        </div>
+
+        <div className="actions flex gap-5 justify-start items-end">
+          <Button
+            type="submit"
+            disabled={isSubmitting}
+            className="mt-5 bg-green-500"
+          >
+            {isSubmitting ? "Update" : "Updating"}
+          </Button>
+        </div>
+      </form>
+    </div>
+  );
+};
+
+export default NewVehicle;

@@ -1,0 +1,16 @@
+{
+  "name": "thesis",
+  "version": "1.0.0",
+  "description": "This is root package.json for Master Thesis",
+  "scripts": {
+    "build:back": "docker-compose build backend --build",
+    "start:back": "docker-compose up backend",
+    "build:front": "docker-compose build frontend",
+    "start:db": "docker-compose up -d db",
+    "stop:db": "docker-compose down db",
+    "delete:db": "docker-compose down db && docker volume rm thesis_thesis-db",
+    "start:fullstack": "docker-compose up db && docker-compose up backend -- build"
+  },
+  "author": "Milan Eic",
+  "license": "ISC"
+}

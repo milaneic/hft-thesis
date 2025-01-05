@@ -1,0 +1,18 @@
+-- CREATE DATABASE 
+
+DROP DATABASE IF EXISTS thesis;
+
+CREATE DATABASE thesis;
+
+USE thesis;
+
+DROP USER IF EXISTS 'user'@'%';
+DROP USER IF EXISTS 'backend_user'@'%';
+
+FLUSH PRIVILEGES;
+
+CREATE USER 'user'@'%' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON *.* TO 'user'@'%';
+
+CREATE USER 'backend_user'@'%' IDENTIFIED BY 'T4b9yFq7Zx3L8pD2';
+GRANT ALL PRIVILEGES ON *.* TO 'backend_user'@'%';
