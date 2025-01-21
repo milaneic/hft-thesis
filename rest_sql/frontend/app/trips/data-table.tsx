@@ -42,7 +42,6 @@ export function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const router = useRouter();
   // State to manage filter value
-  const [filterValue, setFilterValue] = useState("");
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -77,7 +76,6 @@ export function DataTable<TData, TValue>({
             ""
           }
           onChange={(event) => {
-            setFilterValue(event.target.value);
             table
               .getColumn("firstOrderOrigin")
               ?.setFilterValue(event.target.value);

@@ -11,7 +11,10 @@
     "delete:graph": "docker-compose -f graph_sql/docker-compose.yaml down --volumes --remove-orphans",
     "start:orm": "docker-compose -f graph_mongo_orm/docker-compose.yaml up --build -d",
     "stop:orm": "docker-compose -f graph_mongo_orm/docker-compose.yaml stop",
-    "delete:orm": "docker-compose -f graph_mongo_orm/docker-compose.yaml down --volumes --remove-orphans"
+    "delete:orm": "docker-compose -f graph_mongo_orm/docker-compose.yaml down --volumes --remove-orphans",
+    "start:nosql": "docker-compose -f graph_mongo/docker-compose.yaml up --build -d",
+    "stop:nosql": "docker-compose -f graph_mongo/docker-compose.yaml stop",
+    "delete:nosql": "docker-compose -f graph_mongo/docker-compose.yaml down --volumes --remove-orphans"
   },
   "author": "Milan Eic",
   "license": "ISC",

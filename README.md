@@ -62,4 +62,15 @@ This project is divided into four backend services and two frontend services.
    cd hft-thesis
    ```
 
-2.
+2. Depending of which application you want to run chose which you want to run.
+      REST - npm run start:rest
+      GRAPHQL SQL - npm run start:graph
+      MONGO NOSQL ORM - npm run start:orm
+      MONGO NOSQL- npm run start:mongo
+
+
+
+## Testing
+
+1. Download Apache JMeter from https://jmeter.apache.org/download_jmeter.cgi.
+2. 

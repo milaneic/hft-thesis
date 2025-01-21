@@ -82,15 +82,7 @@ export const columns: ColumnDef<Trip>[] = [
       const orders: Order[] | string =
         row.getValue<Order[]>("firstOrderOrigin");
       return <FirstOrderOrigin orders={orders} />;
-    },
-    filterFn: (row, columnId, filterValue) => {
-      const orders: Order[] = row.getValue(columnId);
-      // Assuming you are filtering based on the first order's origin country
-      return orders.some((order) =>
-        order.origin.toLowerCase().includes(filterValue.toLowerCase())
-      );
-    },
-    filterable: true, // Ensure the column is marked as filterable
+    }
   },
   {
     id: "lastOrderDestination",
